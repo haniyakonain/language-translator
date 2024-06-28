@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -12,10 +13,14 @@ body {
   justify-content: center;
   min-height: 100vh;
   background-image: url("lang.jpg");
+  background-size: cover;
+  background-position: center;
+  padding: 20px;
 }
 
 .container {
-  width: 690px;
+  width: 100%;
+  max-width: 690px;
   background: #fff;
   border-radius: 7px;
   padding: 30px;
@@ -24,6 +29,8 @@ body {
 .container h1 {
   text-align: center;
   text-transform: uppercase;
+  margin-bottom: 20px;
+  font-size: 24px;
 }
 
 .wrapper {
@@ -99,6 +106,7 @@ li,
 .controls .exchange {
   color: #9f9f9f;
   font-size: 16px;
+  cursor: pointer;
 }
 
 .container button {
@@ -114,8 +122,96 @@ li,
   font-weight: bold;
   font-size: 17px;
   text-transform: uppercase;
+  transition: background 0.3s ease;
 }
 
 .container button:hover {
   background: #30e8bf;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  .container h1 {
+    font-size: 20px;
+  }
+
+  .text-input textarea {
+    height: 200px;
+    font-size: 16px;
+  }
+
+  .controls .row select {
+    font-size: 16px;
+  }
+
+  .controls .icons i {
+    font-size: 12px;
+    width: 40px;
+  }
+
+  .container button {
+    font-size: 15px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 15px;
+  }
+
+  .container h1 {
+    font-size: 18px;
+  }
+
+  .text-input textarea {
+    height: 150px;
+    font-size: 14px;
+  }
+
+  .controls .row select {
+    font-size: 14px;
+  }
+
+  .controls .icons i {
+    font-size: 10px;
+    width: 30px;
+  }
+
+  .container button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .wrapper .text-input {
+    flex-direction: column;
+  }
+
+  .text-input .to-text {
+    border-left: none;
+    border-top: 1px solid #bbb;
+  }
+
+  .controls .row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .controls .row.from .icons,
+  .controls .row.to .icons {
+    border: none;
+    padding: 10px 0;
+  }
+
+  .controls .icons {
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .controls .exchange {
+    margin: 10px 0;
+  }
 }
