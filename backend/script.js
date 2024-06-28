@@ -10,33 +10,24 @@ const translateBtn = document.querySelector(
 );
 const icons =
 	document.querySelectorAll(".icons i");
-const speakFromBtn =
-	document.getElementById("speak-from");
-const listenFromBtn = document.getElementById(
-	"listen-from"
-);
-const listenToBtn =
-	document.getElementById("listen-to");
+const microphoneBtn =
+	document.getElementById("microphone");
 
 // Google Cloud API Keys (replace with your own)
 const apiKey =
 	"AIzaSyBMReu2HXQgIOxIAgPfO77biNaqEu1JiEU";
 const translationApiUrl = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
 const textToSpeechApiUrl = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`;
-const speechToTextApiUrl = `https://speech.googleapis.com/v1/speech:recognize?key=${apiKey}`;
 
 // Populate language options
 selectTag.forEach((tag, id) => {
 	for (const country_code in countries) {
-		let selected = "";
-		if (id === 0 && country_code === "en") {
-			selected = "selected";
-		} else if (
-			id === 1 &&
-			country_code === "hi"
-		) {
-			selected = "selected";
-		}
+		let selected =
+			id === 0 && country_code === "en"
+				? "selected"
+				: id === 1 && country_code === "hi"
+				? "selected"
+				: "";
 		let option = `<option value="${country_code}" ${selected}>${countries[country_code]}</option>`;
 		tag.insertAdjacentHTML("beforeend", option);
 	}
@@ -44,12 +35,14 @@ selectTag.forEach((tag, id) => {
 
 // Function to handle language exchange
 exchangeIcon.addEventListener("click", () => {
-	let tempText = fromText.value;
-	let tempLang = selectTag[0].value;
-	fromText.value = toText.value;
-	selectTag[0].value = selectTag[1].value;
-	toText.value = tempText;
-	selectTag[1].value = tempLang;
+	[fromText.value, toText.value] = [
+		toText.value,
+		fromText.value,
+	];
+	[selectTag[0].value, selectTag[1].value] = [
+		selectTag[1].value,
+		selectTag[0].value,
+	];
 });
 
 // Function to translate text using Google Cloud Translation API
@@ -129,11 +122,11 @@ function speakText(text, lang) {
 		});
 }
 
-// Function to perform speech recognition using Google Cloud Speech-to-Text API
-function recognizeSpeech() {
+// Function to handle speech recognition
+function startSpeechRecognition() {
 	if (!("webkitSpeechRecognition" in window)) {
 		alert(
-			"Your browser does not support speech recognition."
+			"Your browser doesn't support speech recognition. Please try a different browser."
 		);
 		return;
 	}
@@ -149,6 +142,7 @@ function recognizeSpeech() {
 			"placeholder",
 			"Listening..."
 		);
+		microphoneBtn.classList.add("listening");
 	};
 
 	recognition.onresult = (event) => {
@@ -165,6 +159,7 @@ function recognizeSpeech() {
 			"placeholder",
 			"Speech Recognition Error"
 		);
+		microphoneBtn.classList.remove("listening");
 	};
 
 	recognition.onend = () => {
@@ -172,6 +167,7 @@ function recognizeSpeech() {
 			"placeholder",
 			"Enter text"
 		);
+		microphoneBtn.classList.remove("listening");
 	};
 
 	recognition.start();
@@ -179,13 +175,13 @@ function recognizeSpeech() {
 
 // Event listener for translate button
 translateBtn.addEventListener("click", () => {
-	let text = fromText.value;
-	let translateFrom =
-		selectTag[0].value.split("-")[0]; // Get primary language code
-	let translateTo =
-		selectTag[1].value.split("-")[0]; // Get primary language code
-
+	let text = fromText.value.trim();
 	if (!text) return;
+
+	let translateFrom =
+		selectTag[0].value.split("-")[0];
+	let translateTo =
+		selectTag[1].value.split("-")[0];
 
 	toText.setAttribute(
 		"placeholder",
@@ -198,11 +194,11 @@ translateBtn.addEventListener("click", () => {
 icons.forEach((icon) => {
 	icon.addEventListener("click", ({ target }) => {
 		if (target.classList.contains("fa-copy")) {
-			let textToCopy =
+			navigator.clipboard.writeText(
 				target.id === "from"
 					? fromText.value
-					: toText.value;
-			navigator.clipboard.writeText(textToCopy);
+					: toText.value
+			);
 		} else if (
 			target.classList.contains("fa-volume-up")
 		) {
@@ -219,7 +215,11 @@ icons.forEach((icon) => {
 	});
 });
 
-// Event listener for speech recognition button
-speakFromBtn.addEventListener("click", () => {
-	recognizeSpeech();
+// Event listener for microphone button
+microphoneBtn.addEventListener("click", () => {
+	if (
+		!microphoneBtn.classList.contains("listening")
+	) {
+		startSpeechRecognition();
+	}
 });
