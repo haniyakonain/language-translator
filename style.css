@@ -215,3 +215,7 @@ li,
     margin: 10px 0;
   }
 }
+#from-speak.listening {
+    background-color: #ff4444;
+    color: white;
+}
