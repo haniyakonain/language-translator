@@ -13,6 +13,8 @@ body {
   justify-content: center;
   min-height: 100vh;
   background-image: url("lang.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   background-size: cover;
   background-position: center;
   padding: 20px;
