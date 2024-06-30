@@ -21,15 +21,35 @@ const textToSpeechApiUrl = `https://texttospeech.googleapis.com/v1/text:synthesi
 
 // Populate language options
 selectTag.forEach((tag, id) => {
+	if (id === 0) {
+		// For the input side, add English as the first option
+		let englishOption = `<option value="en" selected>English</option>`;
+		tag.insertAdjacentHTML(
+			"beforeend",
+			englishOption
+		);
+	}
+
+	// Add all languages (including English for the output side)
 	for (const country_code in countries) {
+		if (id === 0 && country_code === "en")
+			continue; // Skip English for input side as it's already added
+
 		let selected =
-			id === 0 && country_code === "en"
-				? "selected"
-				: id === 1 && country_code === "hi"
+			id === 1 && country_code === "hi"
 				? "selected"
 				: "";
 		let option = `<option value="${country_code}" ${selected}>${countries[country_code]}</option>`;
 		tag.insertAdjacentHTML("beforeend", option);
+	}
+
+	// If English wasn't in the original list for input side, remove the duplicate
+	if (id === 0 && countries["en"]) {
+		tag
+			.querySelector(
+				'option[value="en"]:not(:first-child)'
+			)
+			.remove();
 	}
 });
 
