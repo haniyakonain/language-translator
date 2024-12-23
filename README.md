@@ -10,7 +10,6 @@ Language Translator is a web application that allows users to translate text fro
 - [Usage](#usage)
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 - **Text Input and Output**: Users can input text to be translated and view the translated text in the respective textareas.
